@@ -1,4 +1,4 @@
-from src.control.freight import FreightUseCases
+from src.controller.freight import FreightUseCases
 from src.model.order_repository import OrderRepository
 from src.view.schemas.freight import FreightCalcRequest
 from src.view.schemas.order import OrderCreate

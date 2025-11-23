@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from src.model.employee_point_repository import EmployeePointRepository
 from src.model.employee_repository import EmployeeRepository
-from src.control.employee import EmployeeUseCases
+from src.controller.employee import EmployeeUseCases
 
 router = APIRouter(prefix="/employees")
 

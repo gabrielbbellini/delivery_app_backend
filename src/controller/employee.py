@@ -1,5 +1,5 @@
 from typing import Optional
-from src.control.auth import AuthUseCases
+from src.controller.auth import AuthUseCases
 from src.model.employee_point_repository import EmployeePointRepository
 from src.model.employee_repository import EmployeeRepository
 from src import models

@@ -8,9 +8,9 @@ from src.model.order_repository import OrderRepository
 from src.model.payment_repository import PaymentRepository
 from src.view.schemas.order import OrderCreate
 from src.view.schemas.payment import Payment
-from src.control.freight import FreightUseCases
-from src.control.order import OrderUseCases
-from src.control.payment import PaymentUseCase
+from src.controller.freight import FreightUseCases
+from src.controller.order import OrderUseCases
+from src.controller.payment import PaymentUseCase
 
 router = APIRouter(prefix="/orders")
 
