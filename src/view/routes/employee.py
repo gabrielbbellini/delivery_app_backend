@@ -4,8 +4,9 @@ from src.database import get_db
 import src.models as models
 from sqlalchemy.orm import Session
 
-from src.model.repositories import EmployeePointRepository, EmployeeRepository
-from src.usecases import EmployeeUseCases
+from src.model.employee_point_repository import EmployeePointRepository
+from src.model.employee_repository import EmployeeRepository
+from src.control.employee import EmployeeUseCases
 
 router = APIRouter(prefix="/employees")
 
@@ -18,10 +19,9 @@ def register_employee(
     phone: str | None = None,
     db: Session = Depends(get_db)
 ):
-    usecases = EmployeeUseCases(EmployeeRepository(), EmployeePointRepository())
+    usecases = EmployeeUseCases(EmployeeRepository(db), EmployeePointRepository(db))
     try:
         return usecases.create_employee(
-            db,
             name=name,
             job_role=job_role,
             registry_number=registry_number,
@@ -37,9 +37,9 @@ def register_employee_point(
     db: Session = Depends(get_db),
     current=Depends(get_current_employee),
 ):
-    usecases = EmployeeUseCases(EmployeeRepository(), EmployeePointRepository())
+    usecases = EmployeeUseCases(EmployeeRepository(db), EmployeePointRepository(db))
 
-    return usecases.register_point(db, current["employee_id"], point_type)
+    return usecases.register_point(current["employee_id"], point_type)
 
 
 @router.get("/employees/me/points")
@@ -47,7 +47,7 @@ def list_employee_points(
     db: Session = Depends(get_db),
     current=Depends(get_current_employee),
 ):
-    usecases = EmployeeUseCases(EmployeeRepository(), EmployeePointRepository())
-    return usecases.list_points(db, current["employee_id"])
+    usecases = EmployeeUseCases(EmployeeRepository(db), EmployeePointRepository(db))
+    return usecases.list_points(current["employee_id"])
 
 employeeRouter = router

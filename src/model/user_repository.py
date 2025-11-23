@@ -3,10 +3,10 @@ from src import models
 
 class UserRepository:
 
-    def __init__ (self, db: Session):
+    def __init__ (self, db: Session) -> None:
         self.db = db
 
-    def create_user(self, name: str, phone: str, email: str, password_hash: str) -> models.User:
+    def create_user(self, name: str, phone: str | None, email: str, password_hash: str) -> models.User:
         user = models.User(
             name=name,
             phone=phone,

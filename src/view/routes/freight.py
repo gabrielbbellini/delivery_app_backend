@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from src.schemas import FreightCalcRequest
-from src.usecases import FreightUseCases
+from src.view.schemas.freight import FreightCalcRequest
+from src.control.freight import FreightUseCases
 
 router = APIRouter(prefix="/freight")
 

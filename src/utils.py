@@ -31,8 +31,8 @@ def decode_token(token: str) -> dict:
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
 async def get_coordinates_from_cep(cep: str) -> tuple[float, float]:
-   coords = cep_to_coords(cep, factory=CEPAbertoConverter)
-   return [coords["latitude"], coords["longitude"]]
+   coords = cep_to_coords(cep, factory=CEPAbertoConverter) # type: ignore
+   return [coords["latitude"], coords["longitude"]] # type: ignore
 
 OSRM_URL = "http://router.project-osrm.org/route/v1/driving"
 async def get_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
@@ -72,7 +72,10 @@ def calculate_freight_price(distance_km: float, weight: float, freight_type: Fre
         FreightTypeEnum.normal: 5,
         FreightTypeEnum.sedex: 10,
         FreightTypeEnum.sedex10: 15
-    }.get(freight_type_str)
+    }.get(FreightTypeEnum(freight_type_str))
+
+    if not base_rate:
+        raise ValueError("Invalid freight")
 
     price = (distance_km * weight) + base_rate
     return round(price, 2)

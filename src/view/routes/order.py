@@ -4,9 +4,13 @@ from sqlalchemy.orm import Session
 from .helpers import get_current_employee, get_current_user
 from src.database import get_db
 import src.models as models
-from src.model.repositories import OrderRepository, PaymentRepository
-from src.schemas import OrderCreate, Payment
-from src.usecases import FreightUseCases, OrderUseCases, PaymentUseCase
+from src.model.order_repository import OrderRepository
+from src.model.payment_repository import PaymentRepository
+from src.view.schemas.order import OrderCreate
+from src.view.schemas.payment import Payment
+from src.control.freight import FreightUseCases
+from src.control.order import OrderUseCases
+from src.control.payment import PaymentUseCase
 
 router = APIRouter(prefix="/orders")
 
@@ -16,9 +20,9 @@ async def create_order(
     db: Session = Depends(get_db),
     current=Depends(get_current_user),
 ):
-    usecase = OrderUseCases(OrderRepository(), FreightUseCases())
+    usecase = OrderUseCases(OrderRepository(db), FreightUseCases())
     try:
-        order = await usecase.create_order(db, current["user_id"], payload)
+        order = await usecase.create_order(current["user_id"], payload)
         return order
     except ValueError as e:
         raise HTTPException(400, str(e))
@@ -26,8 +30,8 @@ async def create_order(
 
 @router.get("/orders")
 def list_my_orders(db: Session = Depends(get_db), current=Depends(get_current_user)):
-    usecase = OrderUseCases(OrderRepository(), FreightUseCases())
-    return usecase.list_user_orders(db, current["user_id"])
+    usecase = OrderUseCases(OrderRepository(db), FreightUseCases())
+    return usecase.list_user_orders(current["user_id"])
 
 
 @router.get("/orders/{order_id}/delivery")
@@ -39,9 +43,9 @@ def get_order_for_delivery(
     if current["job_role"] != models.JobRole.deliverer.value:
         raise HTTPException(403, "Not allowed")
 
-    usecase = OrderUseCases(OrderRepository(), FreightUseCases())
+    usecase = OrderUseCases(OrderRepository(db), FreightUseCases())
     try:
-        return usecase.get_order_for_delivery(db, order_id)
+        return usecase.get_order_for_delivery(order_id)
     except ValueError as e:
         raise HTTPException(404, str(e))
 
@@ -53,15 +57,15 @@ def count_orders_today(
     if current["job_role"] != models.JobRole.manager.value:
         raise HTTPException(403, "Only manager")
 
-    usecase = OrderUseCases(OrderRepository(), FreightUseCases())
-    return { "count": usecase.count_orders_today(db) }
+    usecase = OrderUseCases(OrderRepository(db), FreightUseCases())
+    return { "count": usecase.count_orders_today() }
 
 @router.post("/orders/{order_id}/pay")
 def pay_order(order_id: int, payload: Payment, db: Session = Depends(get_db)):
-    repo = PaymentRepository()
+    repo = PaymentRepository(db)
     usecase = PaymentUseCase(repo)
     try:
-        result = usecase.process_payment(db, order_id, payload.method)
+        result = usecase.process_payment(order_id, payload.method)
         return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
