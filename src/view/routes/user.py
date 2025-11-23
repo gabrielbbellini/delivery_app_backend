@@ -5,7 +5,7 @@ from .helpers import get_current_user
 from src.database import get_db
 from src.model.user_repository import UserRepository
 from src.view.schemas.user import UserCreate, UserUpdate
-from src.controller.user import UserUseCases
+from src.domain.usecases.user import UserUseCases
 
 router = APIRouter(prefix="/users")
 

@@ -1,15 +1,16 @@
 from typing import Optional
-from src.controller.auth import AuthUseCases
+from src.domain.usecases.auth import AuthUseCases
 from src.model.employee_point_repository import EmployeePointRepository
 from src.model.employee_repository import EmployeeRepository
-from src import models
+from src.domain.entities.employees import JobRole
+from src.domain.entities.employee_point import PointType
 
 class EmployeeUseCases:
     def __init__(self, employees_repo: EmployeeRepository, points_repo: EmployeePointRepository):
         self.employees_repo = employees_repo
         self.points_repo = points_repo
 
-    def create_employee(self, name: str, job_role: models.JobRole, registry_number: str, password: str, phone: Optional[str] = None):
+    def create_employee(self, name: str, job_role: JobRole, registry_number: str, password: str, phone: Optional[str] = None):
         existing = self.employees_repo.get_by_registry(registry_number)
         if existing:
             raise ValueError("Registry number already registered")
@@ -30,7 +31,7 @@ class EmployeeUseCases:
         token = AuthUseCases.generate_jwt(token_data)
         return token
 
-    def register_point(self, employee_id: int, point_type: models.PointType):
+    def register_point(self, employee_id: int, point_type: PointType):
         point = self.points_repo.add_point(employee_id=employee_id, point_type=point_type)
         return point
 

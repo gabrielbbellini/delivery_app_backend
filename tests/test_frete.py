@@ -1,6 +1,6 @@
 import pytest
 
-from src.models import FreightTypeEnum
+from src.domain.entities.order import FreightTypeEnum
 from src.utils import calculate_freight_price
 
 class TestFrete:
@@ -31,7 +31,7 @@ class TestFrete:
         distancia = 500
         tipo = "fedex"
         with pytest.raises(ValueError):
-            resultado = calculate_freight_price(distancia, peso, tipo)
+            resultado = calculate_freight_price(distancia, peso, tipo) # type: ignore
 
     def test_input_distancia_invalida(self):
         peso = 4.2
@@ -45,11 +45,11 @@ class TestFrete:
         distancia = 500
         tipo = FreightTypeEnum.normal
         with pytest.raises(TypeError):
-            calculate_freight_price(distancia, peso, tipo)
+            calculate_freight_price(distancia, peso, tipo) # type: ignore
 
     def test_gerar_frete_entrada_nula(self):
         peso = None
         distancia = 500
         tipo = FreightTypeEnum.normal
         with pytest.raises(TypeError):
-            calculate_freight_price(distancia, peso, tipo)
+            calculate_freight_price(distancia, peso, tipo) # type: ignore

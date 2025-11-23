@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, EmailStr
 from typing import Optional
-from ...models import UserRole
+from src.domain.entities.user import UserRole
 
 class UserCreate(BaseModel):
     name: str = Field(..., min_length=3)

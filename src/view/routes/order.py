@@ -3,14 +3,14 @@ from sqlalchemy.orm import Session
 
 from .helpers import get_current_employee, get_current_user
 from src.database import get_db
-import src.models as models
 from src.model.order_repository import OrderRepository
 from src.model.payment_repository import PaymentRepository
 from src.view.schemas.order import OrderCreate
 from src.view.schemas.payment import Payment
-from src.controller.freight import FreightUseCases
-from src.controller.order import OrderUseCases
-from src.controller.payment import PaymentUseCase
+from src.domain.usecases.freight import FreightUseCases
+from src.domain.usecases.order import OrderUseCases
+from src.domain.usecases.payment import PaymentUseCase
+from src.domain.entities.employees import JobRole
 
 router = APIRouter(prefix="/orders")
 
@@ -40,7 +40,7 @@ def get_order_for_delivery(
     db: Session = Depends(get_db),
     current=Depends(get_current_employee),
 ):
-    if current["job_role"] != models.JobRole.deliverer.value:
+    if current["job_role"] != JobRole.deliverer.value:
         raise HTTPException(403, "Not allowed")
 
     usecase = OrderUseCases(OrderRepository(db), FreightUseCases())
@@ -54,7 +54,7 @@ def count_orders_today(
     db: Session = Depends(get_db),
     current=Depends(get_current_employee),
 ):
-    if current["job_role"] != models.JobRole.manager.value:
+    if current["job_role"] != JobRole.manager.value:
         raise HTTPException(403, "Only manager")
 
     usecase = OrderUseCases(OrderRepository(db), FreightUseCases())

@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
-from src.models import FreightTypeEnum
+
+from src.domain.entities.order import FreightTypeEnum
 
 class OrderCreate(BaseModel):
     origin_zip: str = Field(min_length=8, max_length=9)

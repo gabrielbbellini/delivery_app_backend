@@ -7,7 +7,7 @@ from config import ALGORITHM, SECRET_KEY
 
 from cep_to_coords.strategies import CEPAbertoConverter
 
-from .models import FreightTypeEnum
+from src.domain.entities.order import FreightTypeEnum
 
 pwd_context = CryptContext(
     schemes=["argon2"],

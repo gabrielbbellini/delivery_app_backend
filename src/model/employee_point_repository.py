@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session
-from src import models
+from src.domain.entities.employee_point import PointType, EmployeePoint
 
 class EmployeePointRepository:
     def __init__(self, db: Session) -> None:
         self.db = db
-        
-    def add_point(self, employee_id: int, point_type: models.PointType):
-        point = models.EmployeePoint(
+
+    def add_point(self, employee_id: int, point_type: PointType):
+        point = EmployeePoint(
             employee_id=employee_id,
             point_type=point_type
         )
@@ -15,10 +15,10 @@ class EmployeePointRepository:
         self.db.refresh(point)
         return point
 
-    def list_points(self, employee_id: int) -> list[models.EmployeePoint]:
+    def list_points(self, employee_id: int) -> list[EmployeePoint]:
         return (
-            self.db.query(models.EmployeePoint)
-            .filter(models.EmployeePoint.employee_id == employee_id)
-            .order_by(models.EmployeePoint.timestamp.desc())
+            self.db.query(EmployeePoint)
+            .filter(EmployeePoint.employee_id == employee_id)
+            .order_by(EmployeePoint.timestamp.desc())
             .all()
         )

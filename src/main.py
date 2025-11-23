@@ -1,6 +1,6 @@
 from fastapi import APIRouter, FastAPI
 from src.database import engine, Base
-from src import models 
+import src.domain.entities 
 from src.view.routes import freight, login, user, employee, order
 
 Base.metadata.create_all(bind=engine)

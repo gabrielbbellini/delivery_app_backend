@@ -1,19 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException
 from .helpers import get_current_employee
 from src.database import get_db
-import src.models as models
 from sqlalchemy.orm import Session
-
+from src.domain.entities.employees import JobRole
+from src.domain.entities.employee_point import PointType
 from src.model.employee_point_repository import EmployeePointRepository
 from src.model.employee_repository import EmployeeRepository
-from src.controller.employee import EmployeeUseCases
+from src.domain.usecases.employee import EmployeeUseCases
 
 router = APIRouter(prefix="/employees")
 
 @router.post("/register")
 def register_employee(
     name: str,
-    job_role: models.JobRole,
+    job_role: JobRole,
     registry_number: str,
     password: str,
     phone: str | None = None,
@@ -33,7 +33,7 @@ def register_employee(
 
 @router.post("/employees/me/point")
 def register_employee_point(
-    point_type: models.PointType,
+    point_type: PointType,
     db: Session = Depends(get_db),
     current=Depends(get_current_employee),
 ):

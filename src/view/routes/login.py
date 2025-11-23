@@ -7,8 +7,8 @@ from src.model.employee_point_repository import EmployeePointRepository
 from src.model.employee_repository import EmployeeRepository
 from src.model.user_repository import UserRepository
 from src.view.schemas.login import UserLogin
-from src.controller.employee import EmployeeUseCases
-from src.controller.user import UserUseCases
+from src.domain.usecases.employee import EmployeeUseCases
+from src.domain.usecases.user import UserUseCases
 
 router = APIRouter()
 

@@ -1,6 +1,6 @@
 from typing import Dict, Any
 
-from src.controller.auth import AuthUseCases
+from src.domain.usecases.auth import AuthUseCases
 from src.model.user_repository import UserRepository
 from src.view.schemas.login import UserLogin
 from src.view.schemas.user import UserCreate, UserUpdate
