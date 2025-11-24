@@ -1,3 +1,6 @@
+### próximas tarefas: 
+- Criar testes unitários para os endpoints
+
 ## Para rodar a API de fretes: 🚚
 
 Crie na raiz do projeto um arquivo .env definindo as seguintes variáveis:
